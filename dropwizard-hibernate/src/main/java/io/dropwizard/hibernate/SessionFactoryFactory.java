@@ -1,20 +1,25 @@
 package io.dropwizard.hibernate;
 
 import com.google.common.collect.Sets;
+
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.db.ManagedDataSource;
 import io.dropwizard.setup.Environment;
+
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.AvailableSettings;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.engine.jdbc.connections.internal.DatasourceConnectionProviderImpl;
 import org.hibernate.engine.jdbc.connections.spi.ConnectionProvider;
+import org.hibernate.event.service.internal.EventListenerRegistryImpl;
+import org.hibernate.event.service.spi.EventListenerRegistry;
 import org.hibernate.service.ServiceRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
+
 import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
@@ -79,6 +84,7 @@ public class SessionFactoryFactory {
 
         final ServiceRegistry registry = new StandardServiceRegistryBuilder()
                 .addService(ConnectionProvider.class, connectionProvider)
+                .addService(EventListenerRegistry.class, new EventListenerRegistryImpl())
                 .applySettings(properties)
                 .build();
 
